@@ -24,9 +24,15 @@ async function startRecording() {
         mediaRecorder.start();
         console.log("Recording started...");
 
-        // Toggle buttons for user
-        document.getElementById('startRecordingBtn').style.display = 'none';
-        document.getElementById('stopRecordingBtn').style.display = 'block';
+        // Add "recording" class to change the button color to blue
+        const startButton = document.getElementById('startRecordingBtn');
+        startButton.classList.add('recording');  // Apply blue color
+        startButton.classList.remove('stopped');  // Ensure it's green when stopped
+        startButton.innerText = 'Recording...';
+
+        // Toggle buttons for user interaction
+        startButton.style.display = 'none'; // Hide the start button
+        document.getElementById('stopRecordingBtn').style.display = 'block'; // Show stop button
     } catch (error) {
         console.error("Error accessing microphone:", error);
         alert("Please allow microphone access!");
@@ -37,9 +43,15 @@ function stopRecording() {
     mediaRecorder.stop();
     console.log("Recording stopped.");
 
-    // Toggle buttons for user
-    document.getElementById('startRecordingBtn').style.display = 'block';
-    document.getElementById('stopRecordingBtn').style.display = 'none';
+    // Add "stopped" class to change the button color back to green
+    const startButton = document.getElementById('startRecordingBtn');
+    startButton.classList.add('stopped');  // Apply green color
+    startButton.classList.remove('recording');  // Remove blue color
+    startButton.innerText = 'Start Recording';
+
+    // Toggle buttons for user interaction
+    startButton.style.display = 'block'; // Show the start button again
+    document.getElementById('stopRecordingBtn').style.display = 'none'; // Hide stop button
 }
 
 function uploadAudio(audioBlob) {

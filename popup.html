@@ -21,19 +21,31 @@
     }
 
     button {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4CAF50; /* Default green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    button:hover {
-      background-color: #45a049;
-    }
+button:hover {
+    background-color: #23239f; /* Dark green when hovering */
+  }
+
+#startRecordingBtn.recording {
+    background-color: blue; /* Blue when recording */
+    color: white;
+}
+
+#startRecordingBtn.stopped {
+    background-color: #4CAF50; /* Green when stopped */
+    color: white;
+}
+
+    
 
     #result {
       margin-top: 20px;
@@ -46,7 +58,7 @@
 </head>
 <body>
   <h3>Busted</h3>
-  <button id="startRecordingBtn">Start Recording</button>
+  <button id="startRecordingBtn" style="background-color: #4CAF50;">Start Recording</button>
   <button id="stopRecordingBtn" style="display:none;">Stop Recording</button>
   <div id="result"></div>
   <script src="popup.js"></script>
