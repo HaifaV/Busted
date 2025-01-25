@@ -67,7 +67,19 @@ function uploadAudio(audioBlob) {
     .then(data => {
         console.log(data);
         if (data.transcription) {
-            document.getElementById('result').innerText = "Transcription: " + data.transcription;
+            let resultHtml = "Transcription: " + data.transcription;
+
+            // Display search results
+            if (data.search_results && data.search_results.items.length > 0) {
+                resultHtml += "<br><br><h4>Search Results:</h4>";
+                data.search_results.items.forEach(item => {
+                    resultHtml += `<div><strong>${item.title}</strong><br><a href='${item.link}' target='_blank'>${item.link}</a><br>${item.snippet}</div><br>`;
+                });
+            } else {
+                resultHtml += "<br><br>No search results found.";
+            }
+
+            document.getElementById('result').innerHTML = resultHtml;
         } else {
             document.getElementById('result').innerText = "Error: " + data.error;
         }
