@@ -15,15 +15,13 @@ model = whisper.load_model("base")
 ALLOWED_EXTENSIONS = {'wav', 'mp3', 'flac'}
 
 # Load API key and Search Engine ID from environment variables
-API_KEY = os.getenv("API_KEY") 
-SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")  
+API_KEY = "AIzaSyCJ1ScjyydRHhaVzGboaSC27rP5r0J5D1Y"  # Add your API key to a .env file
+SEARCH_ENGINE_ID = "050985e7ac9e44ea0"  # Add your custom search engine ID to the .env file
 
 def allowed_file(filename):
-    """Check if the uploaded file is allowed."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def transcribe_audio(file_path):
-    """Transcribe audio using the Whisper model."""
     try:
         result = model.transcribe(file_path)
         return result['text']
@@ -31,24 +29,31 @@ def transcribe_audio(file_path):
         return f"Error transcribing audio: {str(e)}"
 
 def search_movie_transcription(transcription):
-    """Search Google Custom Search API for transcription results, including images."""
     if not API_KEY or not SEARCH_ENGINE_ID:
         return "API key or Search Engine ID not configured properly."
 
     search_query = transcription  # The transcribed text from the audio
-    url = f'https://www.googleapis.com/customsearch/v1?q={search_query}&key={API_KEY}&cx={SEARCH_ENGINE_ID}&searchType=image'
+    url = f'https://www.googleapis.com/customsearch/v1?q={search_query}&key={API_KEY}&cx={SEARCH_ENGINE_ID}'
 
     try:
+        # Send request to Google Custom Search API
         response = requests.get(url)
+
+        # Check if the response is successful
         if response.status_code == 200:
             data = response.json()
             if 'items' in data:
+                # Extract relevant information: title, link, snippet, and image
                 results = []
                 for item in data['items']:
                     title = item.get('title', 'No Title')
                     link = item.get('link', 'No Link')
                     snippet = item.get('snippet', 'No Description')
-                    image = item.get('link', '')  # Use the direct link for images
+                    
+                    # Attempt to extract an image if available
+                    image = item.get('pagemap', {}).get('cse_image', [{}])[0].get('src', '')
+                    
+                    # Add the filtered details to the results list
                     results.append({
                         'title': title,
                         'link': link,
@@ -57,7 +62,7 @@ def search_movie_transcription(transcription):
                     })
                 return results
             else:
-                return []
+                return "No results found for this transcription."
         else:
             return f"Error with status code: {response.status_code}"
     except Exception as e:
@@ -65,7 +70,6 @@ def search_movie_transcription(transcription):
 
 @app.route('/upload_audio', methods=['POST'])
 def upload_audio():
-    """Handle audio upload, transcription, and search."""
     if 'audio' not in request.files:
         return jsonify({"error": "No audio file provided"}), 400
 
@@ -74,7 +78,6 @@ def upload_audio():
         try:
             filename = secure_filename(file.filename)
             file_path = os.path.join('uploads', filename)
-            os.makedirs('uploads', exist_ok=True)
             file.save(file_path)
 
             # Transcribe the audio file using Whisper
@@ -86,12 +89,12 @@ def upload_audio():
             # Clean up the uploaded file
             os.remove(file_path)
 
-            # Return the transcription and search results
+            # Return the transcription and filtered search results
             return jsonify({
                 "transcription": transcription,
                 "search_results": {
-                    "count": len(search_results) if isinstance(search_results, list) else 0,
-                    "items": search_results if isinstance(search_results, list) else []
+                    "count": len(search_results),
+                    "items": search_results
                 }
             })
         except Exception as e:
@@ -100,4 +103,7 @@ def upload_audio():
         return jsonify({"error": "Invalid audio file format"}), 400
 
 if __name__ == "__main__":
+    # Create the uploads folder if it doesn't exist
+    os.makedirs('uploads', exist_ok=True)
+
     app.run(debug=True, host='0.0.0.0', port=5000)
