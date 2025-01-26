@@ -6,61 +6,129 @@
   <title>Busted</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      color: #333;
-      margin: 0;
-      padding: 10px;
-      width: 300px;
-    }
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-    h3 {
-      text-align: center;
-      color: #333;
-      font-size: 24px;
-    }
+.container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  text-align: center;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
 
-    button {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #4CAF50; /* Default green */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+h3 {
+  color: #ff6f61;
+  font-size: 24px;  /* Slightly smaller font */
+  margin-bottom: 20px;
+}
+
+button {
+  width: calc(100% - 40px);
+  padding: 15px;
+  margin: 10px 20px;
+  font-size: 16px;  /* Slightly smaller font for buttons */
+  background: #ff6f61;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 button:hover {
-    background-color: #23239f; /* Dark green when hovering */
-  }
-
-#startRecordingBtn.recording {
-    background-color: blue; /* Blue when recording */
-    color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(255, 111, 97, 0.3);
 }
 
-#startRecordingBtn.stopped {
-    background-color: #4CAF50; /* Green when stopped */
-    color: white;
+button.recording {
+  background: #4a90e2;
 }
 
-    
+button.stopped {
+  background: #2ecc71;
+}
 
-    #result {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #fff;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-    }
+#result {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 350px;  /* Reduced height for a compact look */
+  overflow-y: auto;
+  font-size: 14px;  /* Smaller font size */
+  color: #333;
+}
+
+#result p {
+  font-size: 16px;  /* Slightly smaller paragraphs */
+  line-height: 1.4;
+}
+
+#result h4 {
+  color: #ff6f61;
+  font-size: 18px;  /* Smaller heading */
+  margin-top: 15px;
+}
+
+.search-result {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.search-result:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.search-result img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.search-result h5 {
+  font-size: 16px;  /* Smaller title */
+  margin-top: 8px;
+  color: #333;
+}
+
+.search-result a {
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;  /* Smaller font for links */
+}
+
+.search-result a:hover {
+  text-decoration: underline;
+}
+
   </style>
 </head>
 <body>
-  <h3>Busted</h3>
-  <button id="startRecordingBtn" style="background-color: #4CAF50;">Start Recording</button>
-  <button id="stopRecordingBtn" style="display:none;">Stop Recording</button>
-  <div id="result"></div>
+  <div class="container">
+    <h3>Busted</h3>
+    <button id="startRecordingBtn" class="stopped">Start Recording</button>
+    <button id="stopRecordingBtn" style="display:none;">Stop Recording</button>
+    <div id="result"></div>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>

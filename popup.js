@@ -58,7 +58,7 @@ function uploadAudio(audioBlob) {
     const formData = new FormData();
     formData.append("audio", audioBlob, "audio.wav");
 
-    // Send audio data to server
+    // Send audio data to the server
     fetch('http://127.0.0.1:5000/upload_audio', {
         method: 'POST',
         body: formData,
@@ -67,16 +67,23 @@ function uploadAudio(audioBlob) {
     .then(data => {
         console.log(data);
         if (data.transcription) {
-            let resultHtml = "Transcription: " + data.transcription;
+            let resultHtml = `<p><strong>Transcription:</strong> ${data.transcription}</p>`;
 
             // Display search results
             if (data.search_results && data.search_results.items.length > 0) {
-                resultHtml += "<br><br><h4>Search Results:</h4>";
+                resultHtml += "<br><h4>Search Results:</h4>";
                 data.search_results.items.forEach(item => {
-                    resultHtml += `<div><strong>${item.title}</strong><br><a href='${item.link}' target='_blank'>${item.link}</a><br>${item.snippet}</div><br>`;
+                    resultHtml += `
+                        <div class="search-result">
+                            <img src="${item.image}" alt="Image Result">
+                            <h5>${item.title}</h5>
+                            <a href="${item.link}" target="_blank">${item.link}</a>
+                            
+                        </div>
+                    `;
                 });
             } else {
-                resultHtml += "<br><br>No search results found.";
+                resultHtml += "<br><p>No search results found.</p>";
             }
 
             document.getElementById('result').innerHTML = resultHtml;
