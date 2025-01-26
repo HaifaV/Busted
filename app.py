@@ -15,8 +15,8 @@ model = whisper.load_model("base")
 ALLOWED_EXTENSIONS = {'wav', 'mp3', 'flac'}
 
 # Load API key and Search Engine ID from environment variables
-API_KEY = "AIzaSyCJ1ScjyydRHhaVzGboaSC27rP5r0J5D1Y"  # Add your API key
-SEARCH_ENGINE_ID = "050985e7ac9e44ea0"  # Add your custom search engine ID
+API_KEY = os.getenv("API_KEY") 
+SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")  
 
 def allowed_file(filename):
     """Check if the uploaded file is allowed."""
